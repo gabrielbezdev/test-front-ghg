@@ -78,6 +78,13 @@ const MenuHeader = () => {
         >
           {isMenuOpen ? <MdClose size={30} /> : <MdMenu size={30} />}
         </button>
+        {/*
+        Eu não coloquei a função de abrir e fechar o as categorias e subcategorias com o click do mouse
+        porque por algum motivo que ainda não decifrei estava conflitando com a de abrir ao passar o mouse
+        então optei pela função que foi solicitada, ai nesse caso para testar e ver o resultado certinho eu
+        indico diminuir a janela do navegador, pois se utilizar a toggle device do DevTools para simular o
+        celular ele vai abrir com os clicks mas não vai fechar, apenas se clicar para abrir outra categoria
+    */}
         <div
           className={`fixed mt-[101px] left-0 h-full w-[300px] bg-dark-washed-red z-50 transform transition-transform duration-500 ${
             isMenuOpen ? "translate-x-0" : "-translate-x-full"
@@ -168,7 +175,7 @@ const MenuHeader = () => {
                   )}
               </li>
             ))}
-              {/* Essa parte foi só pra tentar me aproximar da referência */}
+            {/* Essa parte foi só pra tentar me aproximar da referência */}
             <div className="flex flex-col items-center justify-center mt-5">
               <div className="flex items-center mb-2">
                 <div className="text-white">
