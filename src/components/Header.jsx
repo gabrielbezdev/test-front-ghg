@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaWhatsapp } from "react-icons/fa";
 import { RiShoppingBag4Line } from "react-icons/ri";
+import { MdSearch } from "react-icons/md";
 import logo from "../assets/logo.png";
 
 const Header = () => {
@@ -24,36 +25,64 @@ const Header = () => {
 
   return (
     <div className="flex flex-col items-center bg-dark-washed-red">
-      <div className="w-screen bg-mini-banner text-base py-2 text-center font-montserrat text-white font-bold">
+      {/* Phrases */}
+      <div className="hidden sm:block w-full bg-mini-banner text-base py-2 text-center font-montserrat text-white font-bold">
         {phrases[currentPhrase]}
       </div>
-      <div className="w-[1200px] flex items-center justify-between py-4">
-        <img src={logo} alt="Logo" className="h-16 w-auto" />
-        <input className="ml-4" placeholder="O que você procura?" type="text" />
-        <div className="ml-4 flex items-center">
-          <div className="flex items-center">
-            <div>
+
+      {/* Logo and Icons */}
+      <div className="w-full justify-around sm:max-w-[900px] sm:px-0 hi:max-w-[1200px] flex flex-col sm:flex-row items-center py-4 px-4 ">
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <div className="flex items-center justify-between sm:justify-center w-full">
+            <div className="sm:hidden flex items-center">
+              <MenuHeader />
+            </div>
+            <div className="flex items-center justify-center">
+              <img src={logo} alt="Logo" className="h-16 sm:h-12 min-w-[258px] mx-4 lg:h-16" />
+            </div>
+            <div className="sm:hidden flex items-center">
               <h1 className="text-white">
-                <TbTruckDelivery size={41} />
+                <RiShoppingBag4Line size={35} />
               </h1>
             </div>
+          </div>
+        </div>
+
+        <div className="relative mt-4 sm:mt-0 sm:ml-4 flex-1 sm:flex-none w-full sm:max-w-[250px] md:max-w-[250px]">
+          <input
+            className="w-full h-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none sm:rounded-lg"
+            placeholder="O que você procura?"
+            type="text"
+          />
+          <button className="absolute top-0 right-0 h-full w-10 bg-dark-washed-red text-white border-solid border-2 border-white rounded-full flex items-center justify-center sm:border-none sm:bg-black sm:rounded-lg">
+            <MdSearch size={30} />
+          </button>
+        </div>
+
+        <div className="mt-4 sm:mt-0 flex items-center">
+          <div className="hidden hi:flex items-center block">
+            <div>
+              <div className="text-white">
+                <TbTruckDelivery size={41} />
+              </div>
+            </div>
             <div className="ml-2 text-white">
-              <h1 className="text-lg font-bold">Rastrear Pedidos</h1>
+              <h1 className="text-xs font-bold si:text-lg">Rastrear Pedidos</h1>
               <p className="text-xs">Minha Conta</p>
             </div>
           </div>
-          <div className="flex ml-6 items-center">
+          <div className="hidden hi:flex ml-6 items-center block">
             <div>
-              <h1 className="text-white">
+              <div className="text-white">
                 <FaWhatsapp size={33} />
-              </h1>
+              </div>
             </div>
             <div className="ml-2 text-white">
-              <h1 className="text-lg font-bold">Atendimento</h1>
+              <h1 className="text-xs font-bold si:text-lg">Atendimento</h1>
               <p className="text-xs">Fale Conosco</p>
             </div>
           </div>
-          <div className="flex ml-6 items-center">
+          <div className="hidden sm:flex ml-6 items-center">
             <div>
               <h1 className="text-white">
                 <RiShoppingBag4Line size={35} />
@@ -62,11 +91,14 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center bg-dark-washed-red">
-        <div className="w-[1200px] h-[1px] bg-[#FFCD4D] max-md:hidden"></div>
+
+      {/* Divider */}
+      <div className="hidden sm:flex w-full justify-center bg-dark-washed-red">
+        <div className="w-full sm:w-[1200px] h-[1px] bg-[#FFCD4D]"></div>
       </div>
 
-      <div>
+      {/* Menu Header */}
+      <div className="hidden sm:block">
         <MenuHeader />
       </div>
     </div>

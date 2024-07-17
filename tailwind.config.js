@@ -10,6 +10,16 @@ export default {
       fontFamily: {
         'montserrat': ['Montserrat', 'sans-serif'],
       },
+      screens: {
+        'hi': '900px',
+        // => @media (min-width: 640px) { ... }
+  
+        'si': '1070px',
+        // => @media (min-width: 1024px) { ... }
+  
+        'desktop': '1280px',
+        // => @media (min-width: 1280px) { ... }
+      },
     },
   },
   plugins: [],

@@ -1,10 +1,15 @@
 import { useState } from "react";
 import menuData from "../menu.json";
-import { MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowUp, MdMenu, MdClose, MdOutlineMail, MdEventAvailable } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
+import { FaWhatsapp } from "react-icons/fa";
 
 const MenuHeader = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [hoveredSubcategory, setHoveredSubcategory] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeSubcategory, setActiveSubcategory] = useState(null);
 
   const handleCategoryMouseEnter = (categoryName) => {
     setHoveredCategory(categoryName);
@@ -22,76 +27,203 @@ const MenuHeader = () => {
 
   const handleSubcategoryMouseLeave = () => {};
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    setActiveCategory(null);
+    setActiveSubcategory(null);
+  };
+
+  const toggleCategory = (categoryName) => {
+    setActiveCategory(activeCategory === categoryName ? null : categoryName);
+  };
+
+  const toggleSubcategory = (subcategoryName) => {
+    setActiveSubcategory(activeSubcategory === subcategoryName ? null : subcategoryName);
+  };
+
   return (
-    <nav className="w-screen flex justify-center bg-dark-washed-red">
-      <ul className="flex">
-        {menuData.map((item, index) => (
-          <li
-            key={index}
-            className="relative group"
-            onMouseEnter={() => handleCategoryMouseEnter(item.nome)}
-            onMouseLeave={handleCategoryMouseLeave}
-          >
-            <button
-              className={`text-white text-sm font-bold px-20 py-4 cursor-pointer flex items-center ${
-                hoveredCategory === item.nome ? "bg-opacity-20 bg-black transition duration-300" : "transition duration-300"
-              }`}
-            >
-              {item.nome}
-              <MdKeyboardArrowUp
-                className={`ml-1 size-4 ${
-                  hoveredCategory === item.nome ? "rotate-180 transition duration-500" : "transition duration-500"
-                }`}
-              />
-            </button>
-            {item.subcategorias &&
-              item.subcategorias.length > 0 &&
-              hoveredCategory === item.nome && (
-                <div className="absolute left-0 bg-[#111010] cursor-pointer rounded-bl-lg">
-                  <div className="h-[150px] min-w-[300px]">
-                    <ul>
+    <div className="relative">
+      {/* Menu Sanduíche */}
+      <div className="sm:hidden top-full left-0">
+      <button onClick={toggleMenu} className="text-white transition-transform duration-300 transform hover:scale-110">
+          {isMenuOpen ? <MdClose size={30}/> : <MdMenu size={30}/>}
+        </button>
+        <div className={`fixed mt-[101px] left-0 h-full w-[300px] bg-dark-washed-red z-50 transform transition-transform duration-500 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+          <div className="flex items-center justify-center mb-3 mt-3">
+            <div>
+              <div className="text-white">
+                <TbTruckDelivery size={45} />
+              </div>
+            </div>
+            <div className="ml-2 text-white">
+              <h1 className="text-base si:text-lg">Rastrear Pedidos</h1>
+            </div>
+          </div>
+          <ul className="h-screen bg-dark-washed-red">
+            {menuData.map((item, index) => (
+              <li
+                key={index}
+                className="relative group border-t-2 border-dark-washed-red bg-white"
+                onMouseEnter={() => handleCategoryMouseEnter(item.nome)}
+                onMouseLeave={handleCategoryMouseLeave}
+              >
+                <button
+                  className="flex w-full justify-between text-black text-sm font-bold px-4 py-3 cursor-pointer"
+                  onClick={() => toggleCategory(item.nome)}
+                >
+                  {item.nome}
+                  <MdKeyboardArrowUp
+                    className={`inline-block ml-2 transform ${
+                      hoveredCategory === item.nome || activeCategory === item.nome ? "rotate-180" : "rotate-0"
+                    } transition-transform duration-200`}
+                  />
+                </button>
+                {item.subcategorias &&
+                  item.subcategorias.length > 0 &&
+                  (hoveredCategory === item.nome || activeCategory === item.nome) && (
+                    <ul className="ml-4 mt-2">
                       {item.subcategorias.map((subcategoria, subIndex) => (
                         <li
                           key={subIndex}
-                          className="py-2 flex hover:bg-gray-500/25"
-                          onMouseEnter={() =>
-                            handleSubcategoryMouseEnter(subcategoria.nome)
-                          }
+                          className="py-2 flex flex-col items-start"
+                          onMouseEnter={() => handleSubcategoryMouseEnter(subcategoria.nome)}
                           onMouseLeave={handleSubcategoryMouseLeave}
                         >
-                          <button className="text-white ml-3">
+                          <button
+                            className="flex w-4/5 justify-between text-black ml-3"
+                            onClick={() => toggleSubcategory(subcategoria.nome)}
+                          >
                             {subcategoria.nome}
+                            <MdKeyboardArrowUp
+                              className={`inline-block ml-2 transform ${
+                                hoveredSubcategory === subcategoria.nome || activeSubcategory === subcategoria.nome ? "rotate-180" : "rotate-0"
+                              } transition-transform duration-200`}
+                            />
                           </button>
-                          {hoveredSubcategory === subcategoria.nome &&
+                          {hoveredSubcategory === subcategoria.nome || activeSubcategory === subcategoria.nome ? (
                             subcategoria.subcategorias && (
-                              <div className="flex absolute left-full top-0 bg-[#111010] cursor-pointer rounded-r-lg">
-                                <div className="h-[150px] w-[1px] bg-gray-400"></div>
-                                <ul className="h-[150px] min-w-[200px]">
-                                  {subcategoria.subcategorias.map(
-                                    (subsubcategoria, subsubIndex) => (
-                                      <li
-                                        key={subsubIndex}
-                                        className="py-2 flex hover:bg-gray-500/25"
-                                      >
-                                        <button className="text-white ml-3">
-                                          {subsubcategoria.nome}
-                                        </button>
-                                      </li>
-                                    )
-                                  )}
-                                </ul>
-                              </div>
-                            )}
+                              <ul className="ml-4 mt-2">
+                                {subcategoria.subcategorias.map(
+                                  (subsubcategoria, subsubIndex) => (
+                                    <li
+                                      key={subsubIndex}
+                                      className="py-2 flex border-b"
+                                    >
+                                      <button className="text-black ml-3">
+                                        {subsubcategoria.nome}
+                                      </button>
+                                    </li>
+                                  )
+                                )}
+                              </ul>
+                            )
+                          ) : null}
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  )}
+              </li>
+            ))}
+            <div className="flex flex-col items-center justify-center mt-5">
+              <div className="flex items-center mb-2">
+                <div className="text-white">
+                  <FaWhatsapp size={20} />
                 </div>
-              )}
-          </li>
-        ))}
-      </ul>
-    </nav>
+                <div className="ml-1 text-white">
+                  <h1 className="text-base si:text-lg">(11) 3300-5462</h1>
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <div className="text-white">
+                  <MdOutlineMail size={20} />
+                </div>
+                <div className="ml-1 text-white">
+                  <h1 className="text-base si:text-lg">gabrielbvl2024@gmail.com</h1>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="text-white">
+                  <MdEventAvailable size={20} />
+                </div>
+                <div className="ml-1 text-white">
+                  <h1 className="text-base si:text-lg">Disponível para início imediato</h1>
+                </div>
+              </div>
+            </div>
+          </ul>
+        </div>
+      </div>
+
+      {/* Menu normal */}
+      <div className={`hidden sm:flex w-screen justify-center bg-dark-washed-red`}>
+        <ul className="flex flex-col sm:flex-row">
+          {menuData.map((item, index) => (
+            <li
+              key={index}
+              className="relative group"
+              onMouseEnter={() => handleCategoryMouseEnter(item.nome)}
+              onMouseLeave={handleCategoryMouseLeave}
+            >
+              <button
+                className={`min-w-[200px] text-white text-sm font-bold px-15 py-4 cursor-pointer block ${
+                  hoveredCategory === item.nome ? "bg-opacity-20 bg-black" : ""
+                }`}
+                onClick={() => toggleCategory(item.nome)}
+              >
+                {item.nome}
+                <MdKeyboardArrowUp
+                  className={`inline-block ml-2 transform ${
+                    hoveredCategory === item.nome ? "rotate-180" : "rotate-0"
+                  } transition-transform duration-200`}
+                />
+              </button>
+              {item.subcategorias &&
+                item.subcategorias.length > 0 &&
+                (hoveredCategory === item.nome || activeCategory === item.nome) && (
+                  <div className="absolute left-0 bg-[#111010] cursor-pointer rounded-bl-lg">
+                    <div className="h-[150px] min-w-[300px]">
+                      <ul>
+                        {item.subcategorias.map((subcategoria, subIndex) => (
+                          <li
+                            key={subIndex}
+                            className="py-2 flex hover:bg-gray-500/25"
+                            onMouseEnter={() => handleSubcategoryMouseEnter(subcategoria.nome)}
+                            onMouseLeave={handleSubcategoryMouseLeave}
+                          >
+                            <button className="text-white ml-3">
+                              {subcategoria.nome}
+                            </button>
+                            {hoveredSubcategory === subcategoria.nome &&
+                              subcategoria.subcategorias && (
+                                <div className="flex absolute left-full top-0 bg-[#111010] cursor-pointer rounded-r-lg">
+                                  <div className="h-[150px] w-[1px] bg-gray-400"></div>
+                                  <ul className="h-[150px] min-w-[200px]">
+                                    {subcategoria.subcategorias.map(
+                                      (subsubcategoria, subsubIndex) => (
+                                        <li
+                                          key={subsubIndex}
+                                          className="py-2 flex hover:bg-gray-500/25"
+                                        >
+                                          <button className="text-white ml-3">
+                                            {subsubcategoria.nome}
+                                          </button>
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+                              )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 
